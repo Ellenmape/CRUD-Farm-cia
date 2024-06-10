@@ -1,9 +1,16 @@
 package com.generation.farmacia.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -25,7 +32,7 @@ public class Categorias {
 	@Size(min = 4, max = 100, message = "O campo descricao precisa ter entre 4 e 100 caracteres")
 	private String descricao;
 	
-	@NotBlank(message = "O atributo produto medicamento é obrigatório")
+	@NotBlank(message = "O atributo medicamento é obrigatório")
 	@Size(min = 4, max = 100, message = "O campo descricao precisa ter entre 4 e 100 caracteres")
 	private String medicamentos;
 	
@@ -36,6 +43,19 @@ public class Categorias {
 	@NotBlank(message = "O atributo quantidade é obrigatório")
 	@PositiveOrZero
 	private int quantidade;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "categorias", cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties("categorias")
+	private List<Produtos> produtos;
+	
+
+	public List<Produtos> getProdutos() {
+		return produtos;
+	}
+
+	public void setProdutos(List<Produtos> produtos) {
+		this.produtos = produtos;
+	}
 
 	public Long getId() {
 		return id;
